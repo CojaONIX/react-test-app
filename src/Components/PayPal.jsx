@@ -1,14 +1,23 @@
 import {useContext} from "react";
-import {AmountContext, CurrencyContext} from "../App";
+import {PaidContext} from "../App";
+import {CURRENCIES} from "../Utils/CurrencyUtil";
 
 
 const PayPal = () => {
 
-    const currency = useContext(CurrencyContext);
-    const amount = useContext(AmountContext);
+    const paid = useContext(PaidContext);
 
     return (
-        <p>PayPal {currency} - {amount}</p>
+        <>
+            <h4>{paid.currency} - {paid.amount} x {CURRENCIES[paid.currency]} = {paid.amount * CURRENCIES[paid.currency]}</h4>
+            <input onInput={e => paid.updateAmount(e.currentTarget.value)}/>
+            <select onChange={e => paid.updateCurrency(e.currentTarget.value)}>
+                {Object.keys(CURRENCIES).map((currency) => (
+                    <option key={currency} value={currency}>{currency}</option>
+                ))}
+            </select>
+        </>
+
     );
 }
 

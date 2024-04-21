@@ -2,12 +2,11 @@ import './App.css';
 import Payment from "./Components/Payment";
 import {createContext, useState} from "react";
 
-export const CurrencyContext = createContext();
-export const AmountContext = createContext();
+export const PaidContext = createContext();
 
 function App() {
 
-    const [currency, setCurrency] = useState("USD");
+    const [currency, setCurrency] = useState("EUR");
     const [amount, setAmount] = useState(0);
 
     const updateCurrency = (currency) => {
@@ -21,15 +20,9 @@ function App() {
 
     return (
         <>
-            <CurrencyContext.Provider value={currency}>
-                <AmountContext.Provider value={amount}>
-                    <Payment/>
-                </AmountContext.Provider>
-            </CurrencyContext.Provider>
-
-            <input onInput={e => updateAmount(e.currentTarget.value)}/>
-            <button onClick={() => updateCurrency('EUR')}>EUR</button>
-            <button onClick={() => updateCurrency('USD')}>USD</button>
+            <PaidContext.Provider value={{currency, amount, updateCurrency, updateAmount}}>
+                <Payment/>
+            </PaidContext.Provider>
         </>
     );
 }
