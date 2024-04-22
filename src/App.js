@@ -7,13 +7,10 @@ export const PaidContext = createContext();
 
 function App() {
 
-    const [state, dispatch] = useReducer(userReducer, initialUserState);
+    const [userState, dispatch] = useReducer(userReducer, initialUserState);
 
     const [currency, setCurrency] = useState("EUR");
     const [amount, setAmount] = useState(0);
-    const [username, setUsername] = useState('');
-    const [money, setMoney] = useState(null);
-    const [isUserCreated, setIsUserCreated] = useState(false);
 
     const updateCurrency = (currency) => {
         setCurrency(currency);
@@ -23,29 +20,21 @@ function App() {
         setAmount(value);
     }
 
-    const updateUsername = (name) => {
-        setUsername(name);
-    }
-
-    const updateMoney = (money) => {
-        setMoney(parseInt(money));
-    }
-
     const saveUser = () => {
-        if(!(username.trim() && money)){
+        if(!(userState.username.trim() && userState.money)){
             return;
         }
 
-        setIsUserCreated(true);
+        dispatch({type: 'SET_USER_CREATED', payload: true});
     }
 
     return (
         <>
             <PaidContext.Provider value={{currency, amount, updateCurrency, updateAmount}}>
-                {!isUserCreated &&
+                {!userState.isUserCreated &&
                     <form>
-                        <input onInput={e => updateUsername(e.currentTarget.value)} placeholder="Username"/>
-                        <input onInput={e => updateMoney(e.currentTarget.value)} placeholder="Money"/>
+                        <input onInput={e => dispatch({type: 'SET_USERNAME', payload: e.currentTarget.value})} placeholder="Username"/>
+                        <input onInput={e => dispatch({type: 'SET_MONEY', payload: e.currentTarget.value})} placeholder="Money"/>
                         <button type="button" onClick={saveUser}>Kreiraj Korisnika</button>
                     </form>
                 }
