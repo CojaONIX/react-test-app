@@ -1,10 +1,13 @@
 import './App.css';
 import Payment from "./Components/Payment";
-import {createContext, useState} from "react";
+import {createContext, useReducer, useState} from "react";
+import {userReducer, initialUserState} from "./Reducers/User";
 
 export const PaidContext = createContext();
 
 function App() {
+
+    const [state, dispatch] = useReducer(userReducer, initialUserState);
 
     const [currency, setCurrency] = useState("EUR");
     const [amount, setAmount] = useState(0);
@@ -22,12 +25,10 @@ function App() {
 
     const updateUsername = (name) => {
         setUsername(name);
-
     }
 
     const updateMoney = (money) => {
         setMoney(parseInt(money));
-
     }
 
     const saveUser = () => {
@@ -40,7 +41,15 @@ function App() {
 
     return (
         <>
-            <PaidContext.Provider value={{currency, amount, username, money, isUserCreated, updateCurrency, updateAmount, updateUsername, updateMoney, saveUser}}>
+            <PaidContext.Provider value={{currency, amount, updateCurrency, updateAmount}}>
+                {!isUserCreated &&
+                    <form>
+                        <input onInput={e => updateUsername(e.currentTarget.value)} placeholder="Username"/>
+                        <input onInput={e => updateMoney(e.currentTarget.value)} placeholder="Money"/>
+                        <button type="button" onClick={saveUser}>Kreiraj Korisnika</button>
+                    </form>
+                }
+
                 <Payment/>
             </PaidContext.Provider>
         </>
