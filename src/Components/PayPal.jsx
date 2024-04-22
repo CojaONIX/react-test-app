@@ -9,11 +9,13 @@ const PayPal = () => {
 
     return (
         <>
-            <form>
-                <input onInput={e => paid.updateUsername(e.currentTarget.value)} placeholder="Username"/>
-                <input onInput={e => paid.updateMoney(e.currentTarget.value)} placeholder="Money"/>
-                <button type="button" onClick={paid.saveUser}>Kreiraj Korisnika</button>
-            </form>
+            {!paid.isUserCreated &&
+                <form>
+                    <input onInput={e => paid.updateUsername(e.currentTarget.value)} placeholder="Username"/>
+                    <input onInput={e => paid.updateMoney(e.currentTarget.value)} placeholder="Money"/>
+                    <button type="button" onClick={paid.saveUser}>Kreiraj Korisnika</button>
+                </form>
+            }
 
             <h4>{paid.currency} - {paid.amount} x {CURRENCIES[paid.currency]} = {paid.amount * CURRENCIES[paid.currency]}</h4>
 

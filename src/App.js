@@ -8,8 +8,9 @@ function App() {
 
     const [currency, setCurrency] = useState("EUR");
     const [amount, setAmount] = useState(0);
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState('');
     const [money, setMoney] = useState(null);
+    const [isUserCreated, setIsUserCreated] = useState(false);
 
     const updateCurrency = (currency) => {
         setCurrency(currency);
@@ -33,13 +34,13 @@ function App() {
         if(!(username.trim() && money)){
             return;
         }
-        console.log(username, money, 'radi');
 
+        setIsUserCreated(true);
     }
 
     return (
         <>
-            <PaidContext.Provider value={{currency, amount, username, money, updateCurrency, updateAmount, updateUsername, updateMoney, saveUser}}>
+            <PaidContext.Provider value={{currency, amount, username, money, isUserCreated, updateCurrency, updateAmount, updateUsername, updateMoney, saveUser}}>
                 <Payment/>
             </PaidContext.Provider>
         </>
