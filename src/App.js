@@ -1,13 +1,13 @@
 import './App.css';
 import Payment from "./Components/Payment";
-import {createContext, useReducer, useState} from "react";
-import {userReducer, initialUserState} from "./Reducers/User";
+import {createContext, useEffect, useReducer, useState} from "react";
+import {userReducer, loadUserState} from "./Reducers/User";
 
 export const PaidContext = createContext();
 
 function App() {
 
-    const [userState, dispatch] = useReducer(userReducer, initialUserState);
+    const [userState, dispatch] = useReducer(userReducer, loadUserState());
 
     const [currency, setCurrency] = useState("EUR");
     const [amount, setAmount] = useState(0);
@@ -28,10 +28,18 @@ function App() {
         dispatch({type: 'SET_USER_CREATED', payload: true});
     }
 
+    useEffect( () => {
+        if(userState.isUserCreated){
+            localStorage.setItem("userState", JSON.stringify(userState));
+        }
+    }, [userState]);
+
     return (
         <>
             <PaidContext.Provider value={{currency, amount, updateCurrency, updateAmount}}>
-                {!userState.isUserCreated &&
+                {userState.isUserCreated
+                    ? JSON.stringify(userState)
+                    :
                     <form>
                         <input onInput={e => dispatch({type: 'SET_USERNAME', payload: e.currentTarget.value})} placeholder="Username"/>
                         <input onInput={e => dispatch({type: 'SET_MONEY', payload: e.currentTarget.value})} placeholder="Money"/>
